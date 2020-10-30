@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "target": "ES5",
+    "removeComments": true
+  },
+  "exclude": ["node_modules", "src_example"],
+  "typeRoots": ["node_modules/@types"]
+}
