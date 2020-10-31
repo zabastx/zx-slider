@@ -1,0 +1,17 @@
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    font-family: sans-serif;
+}
+
+main {
+    text-align: center;
+}
+
+.demo {
+    width: 500px;
+    border: 1px solid green;
+    height: 400px;
+    box-sizing: border-box;
+}

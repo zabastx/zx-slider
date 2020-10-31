@@ -1,0 +1,64 @@
+:root {
+    --thumbWidth: 16px;
+    --barHeight: 8px;
+    --posY: calc(var(--barHeight) - var(--thumbWidth))
+}
+
+.slider-vertical {
+    .slider-bar {
+        width: var(--barHeight);
+        height: 100%;
+    }
+}
+
+.slider {
+    position: relative;
+    box-sizing: border-box;
+    &-wrapper {
+        padding: 20px 0;
+    }
+    &-bar {
+        width: 100%;
+        height: var(--barHeight);
+        background-color: #aaa;
+        border-radius: calc(var(--barHeight) / 2);
+        overflow: hidden;
+        box-shadow: inset 0 0 2px;
+        cursor: pointer;
+
+        &::after {
+            content: attr(max-val);
+            display: block;
+            position: absolute;
+            top: calc(var(--thumbWidth) * 0.8);
+            right: 0;
+            padding-left: 0 calc(var(--thumbWidth) / 3);
+        }
+
+        &::before {
+            content: attr(min-val);
+            display: block;
+            position: absolute;
+            top: calc(var(--thumbWidth) * 0.8);
+            left: 0;
+            padding-left: 0 calc(var(--thumbWidth) / 3);
+        }
+    }
+
+    &-thumb {
+        background-color: #fff;
+        box-shadow: 0 0 4px #000;
+        position: absolute;
+        width: var(--thumbWidth);
+        height: var(--thumbWidth);
+        border-radius: 50%;
+        top: calc(var(--posY) / 2);
+        left: 50%;
+        cursor: pointer;
+    }
+
+    &-progress {
+        background: #0b0;
+        height: 100%;
+    }
+}
