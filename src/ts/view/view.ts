@@ -1,4 +1,5 @@
-import { Thumb } from './elements/Thumb'
+import { Bar } from './elements/Bar/Bar'
+import { Thumb } from './elements/Thumb/Thumb'
 import './slider.scss'
 
 export class View implements ViewType {
@@ -24,10 +25,10 @@ export class View implements ViewType {
     }
 
     handleClick(event): void {
-        let newPos = (event.originalEvent.layerX - this.options.thumbWidth / 2) / event.currentTarget.offsetWidth * 100
+        let newPos: number = (event.layerX - this.options.thumbWidth / 2) / event.target.offsetParent.offsetWidth * 100        
         const step = this.options.step / this.options.max * 100
-        const $thumb = event.currentTarget.nextElementSibling as HTMLElement
-        const $bar = event.currentTarget.firstElementChild as HTMLElement
+        const $thumb: HTMLElement = event.currentTarget.nextElementSibling
+        const $bar: HTMLElement = event.currentTarget.firstElementChild
 
         if (newPos % step !== 0) {
             newPos = this.values.reduce((a, b) => {
@@ -36,7 +37,7 @@ export class View implements ViewType {
         }
         
         $thumb.style.left = `calc(${newPos}% - ${this.options.thumbWidth / 2}px)`
-        $bar.style.width = `calc(${newPos}% - ${this.options.thumbWidth / 2}px)`
+        $bar.style.width = `${newPos}%`
     }
 
     handleChange(event: MouseEvent): void {
@@ -51,11 +52,11 @@ export class View implements ViewType {
         
         function onMouseMove(event: MouseEvent): void {
             if (classes.includes(target.className)) {
-                let newPos = event.clientX - shiftX - $('.slider').offset().left
+                let newPos = event.clientX - shiftX - this.container.querySelector('.slider').offsetLeft
                 const maxPos = target.parentElement.offsetWidth
                 const step = this.options.step / this.options.max * 100
-                const $thumb = target.parentElement.parentElement.querySelector('.slider-thumb') as HTMLElement
-                const $progress = target.parentElement.parentElement.querySelector('.slider-progress') as HTMLElement
+                const $thumb: HTMLElement = target.parentElement.parentElement.querySelector('.slider-thumb')
+                const $progress: HTMLElement = target.parentElement.parentElement.querySelector('.slider-progress')
 
                 if (newPos < 0) newPos = 0
                 if (maxPos <= newPos) newPos = maxPos
@@ -69,7 +70,7 @@ export class View implements ViewType {
                 }
 
                 $thumb.style.left = `calc(${newPos}% - ${this.options.thumbWidth / 2}px)`
-                $progress.style.width = `calc(${newPos}% - ${this.options.thumbWidth / 2}px)`
+                $progress.style.width = `${newPos}%`
             }
             
         }
@@ -82,22 +83,26 @@ export class View implements ViewType {
     }
 
     init(): void {
-        const rootStyles =  document.documentElement.style
-        rootStyles.setProperty('--thumbWidth', `${this.options.thumbWidth}px`)
-        rootStyles.setProperty('--barHeight', `${this.options.barHeight}px`)
-
         this.container.insertAdjacentHTML('beforeend', `
             <div class="slider-wrapper">
                 <div class="slider slider-${this.orientation}">
-                    <div class="slider-bar" max-val="${this.options.max}" min-val="${this.options.min}">
-                        <div class="slider-progress"></div>
-                    </div>
                 </div>
             </div>
         `)
-        new Thumb(this.container, this.options.isSingle)
-        this.container.querySelector('.slider-thumb').addEventListener('mousedown', this.handleChange)
-        $('.slider-progress').css('width', '50%')
-        $('.slider-bar').click(this.handleClick)
+
+        new Bar(this.container, this.options)
+        new Thumb(this.container, this.options)
+
+        const $slider: HTMLElement = this.container.querySelector('.slider')
+        const $thumb: HTMLElement = this.container.querySelector('.slider-thumb')
+        const $bar: HTMLElement = this.container.querySelector('.slider-bar')
+
+        // CSS variables
+        $slider.style.setProperty('--thumbWidth', `${this.options.thumbWidth}px`)
+        $slider.style.setProperty('--barHeight', `${this.options.barHeight}px`)
+        $slider.style.setProperty('--posY', `${this.options.barHeight - this.options.thumbWidth}px`)
+
+        $thumb.addEventListener('mousedown', this.handleChange)
+        $bar.addEventListener('click', this.handleClick)
     }
 }

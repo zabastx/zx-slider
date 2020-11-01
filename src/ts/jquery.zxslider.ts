@@ -1,4 +1,4 @@
-import {View} from './view/view'
+import {View} from './View/View'
 
 (function($){
     $.fn.zxSlider = function(options: sliderOptions): JQuery {
@@ -11,7 +11,9 @@ import {View} from './view/view'
             thumbWidth: 16,
             barHeight: 8,
             value: (this.max - this.min) / 2,
-            showValue: true
+            showValue: true,
+            barColor: '#00bb00',
+            thumbColor: '#fff'
         }
         const opts = $.extend(defaultSettings, options)
 

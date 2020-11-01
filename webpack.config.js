@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const {CleanWebpackPlugin} = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-module.exports = {
+const config = {
   mode: 'development',
   context: path.resolve(__dirname, 'src'),
   entry: {
@@ -53,11 +53,11 @@ module.exports = {
   ]
 }
 
-// module.exports = (env, argv) => {
-//   if (argv.mode === 'production') {
-//     config.mode = 'production'
-//     config.devtool = 'none'
-//     config.plugins.push(new CleanWebpackPlugin())
-//   }
-//   return config
-// }
+module.exports = (env, argv) => {
+  if (argv.mode === 'production') {
+    config.mode = 'production'
+    config.devtool = 'none'
+    config.plugins.push(new CleanWebpackPlugin())
+  }
+  return config
+}

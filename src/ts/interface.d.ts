@@ -12,6 +12,8 @@ interface sliderOptions {
     thumbWidth?: number
     barHeight?: number
     showValue?: boolean
+    barColor?: string
+    thumbColor?: string
 }
 
 interface ViewType {
