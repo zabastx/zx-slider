@@ -1,18 +1,20 @@
 import { Bar } from './elements/Bar/Bar'
+import { Scale } from './elements/Scale/Scale'
 import { Thumb } from './elements/Thumb/Thumb'
 import './slider.scss'
 
 export class View implements ViewType {
     options: sliderOptions
     container: HTMLElement
-    orientation: 'vertical' | 'horizontal'
+    direction: 'vertical' | 'horizontal'
 
     constructor(options: sliderOptions, container: HTMLElement) {
         this.options = options
         this.container = container
-        this.orientation = options.isVertical ? 'vertical': 'horizontal'
+        this.direction = options.isVertical ? 'vertical': 'horizontal'
         this.handleClick = this.handleClick.bind(this)
         this.handleChange = this.handleChange.bind(this)
+        this.init()
     }
 
     get values(): number[] {
@@ -29,6 +31,9 @@ export class View implements ViewType {
         const step = this.options.step / this.options.max * 100
         const $thumb: HTMLElement = event.currentTarget.nextElementSibling
         const $bar: HTMLElement = event.currentTarget.firstElementChild
+        const $label: HTMLElement = this.container.querySelector('.slider-label')
+        console.log($label);
+        
 
         if (newPos % step !== 0) {
             newPos = this.values.reduce((a, b) => {
@@ -38,6 +43,8 @@ export class View implements ViewType {
         
         $thumb.style.left = `calc(${newPos}% - ${this.options.thumbWidth / 2}px)`
         $bar.style.width = `${newPos}%`
+        $label.style.left = `${newPos}%`
+        $label.innerText = `${newPos}`
     }
 
     handleChange(event: MouseEvent): void {
@@ -57,6 +64,7 @@ export class View implements ViewType {
                 const step = this.options.step / this.options.max * 100
                 const $thumb: HTMLElement = target.parentElement.parentElement.querySelector('.slider-thumb')
                 const $progress: HTMLElement = target.parentElement.parentElement.querySelector('.slider-progress')
+                const $label: HTMLElement = this.container.querySelector('.slider-label')
 
                 if (newPos < 0) newPos = 0
                 if (maxPos <= newPos) newPos = maxPos
@@ -71,6 +79,8 @@ export class View implements ViewType {
 
                 $thumb.style.left = `calc(${newPos}% - ${this.options.thumbWidth / 2}px)`
                 $progress.style.width = `${newPos}%`
+                $label.style.left = `${newPos}%`
+                $label.innerText = `${newPos}`
             }
             
         }
@@ -85,17 +95,22 @@ export class View implements ViewType {
     init(): void {
         this.container.insertAdjacentHTML('beforeend', `
             <div class="slider-wrapper">
-                <div class="slider slider-${this.orientation}">
+                <div class="slider slider-${this.direction}">
                 </div>
             </div>
         `)
-
         new Bar(this.container, this.options)
         new Thumb(this.container, this.options)
+        new Scale(this.container, this.options)
 
+        this.container.querySelector('.slider').insertAdjacentHTML('beforeend', `<div class="slider-label">${this.options.value}</div>`)
+
+        const $label: HTMLElement = this.container.querySelector('.slider-label')
         const $slider: HTMLElement = this.container.querySelector('.slider')
         const $thumb: HTMLElement = this.container.querySelector('.slider-thumb')
         const $bar: HTMLElement = this.container.querySelector('.slider-bar')
+
+        $label.style.left = `${this.options.value / this.options.max * 100}%`               
 
         // CSS variables
         $slider.style.setProperty('--thumbWidth', `${this.options.thumbWidth}px`)

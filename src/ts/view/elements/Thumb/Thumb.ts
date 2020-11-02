@@ -7,6 +7,6 @@ export class Thumb {
 
         const $thumb: HTMLElement = $slider.querySelector('.slider-thumb')
         $thumb.style.setProperty('background', `${options.thumbColor}`)
-        $thumb.style.setProperty('left', `calc(${50}% - ${options.thumbWidth/2}px)`)
+        $thumb.style.setProperty('left', `calc(${options.value}% - ${options.thumbWidth/2}px)`)
     }
 }

@@ -10,7 +10,7 @@ import {View} from './View/View'
             isSingle: true,
             thumbWidth: 16,
             barHeight: 8,
-            value: (this.max - this.min) / 2,
+            value: 50,
             showValue: true,
             barColor: '#00bb00',
             thumbColor: '#fff'
@@ -18,8 +18,7 @@ import {View} from './View/View'
         const opts = $.extend(defaultSettings, options)
 
         return this.each(function() {
-            const input = new View(opts, this)
-            input.init()
+            new View(opts, this)
         })
     }
 })(jQuery)

@@ -12,6 +12,6 @@ export class Bar {
         const $progress: HTMLElement = $slider.querySelector('.slider-progress')
 
         $progress.style.setProperty('background', `${options.barColor}`)
-        $progress.style.setProperty('width', `${50}%`)
+        $progress.style.setProperty('width', `${options.value}%`)
     }
 }
